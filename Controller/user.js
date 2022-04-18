@@ -111,4 +111,7 @@ exports.signin = async (req, res) => {
     
     
   }
-  
+  exports.test = async (req, res) => {  
+    
+    
+}
