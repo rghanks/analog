@@ -4,12 +4,13 @@ const bodyParser = require('body-parser');
 const User = require('../models/user');
 
 app.use(bodyParser.json());
+app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.urlencoded({ extended: true }));
 
 
 exports.signup = async (req, res) => { 
-
+  console.log(req.body.email);
+  console.log('success');
     if(req.body.email == ''){
         return res.status(400).json({
              status : "false",
@@ -27,7 +28,8 @@ exports.signup = async (req, res) => {
         });
     }
            
-    try{    
+    try{   
+        console.log(req.body.email); 
     await  User.findOne({ email : req.body.email })
         .exec(async (error, user) => {
             if (user){                                            
@@ -39,16 +41,12 @@ exports.signup = async (req, res) => {
                 await  User.findOne({ refferal : req.body.referral_code })
                 .exec(async (error, user) => {
                     if (user){ 
-                        const {
-                            email,
-                            password  
-                           } = req.body;  
                         const signup_bonus = 500;                     
-                              
+                              console.log(req.body.email);
                         const _user = new User({
-                            email, 
-                            password,
-                            signup_bonus
+                            email : req.body.email, 
+                            password : req.body.password,
+                            signup_bonus : signup_bonus
                         });
             
                         _user.save((error, data) => {             
@@ -56,7 +54,7 @@ exports.signup = async (req, res) => {
                                 console.log('Error in Sign Up', error.message);
                                 return res.status(400).json({
                                     status : 'false',
-                                    message: 'Somthing went wrong'
+                                    message: 'Somthing went wrong1'
                                 })
                             }           
             
