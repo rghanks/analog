@@ -20,7 +20,12 @@ exports.signup = async (req, res) => {
              status : "false",
              message : "Password field Cannot be Blank"  
          });
-     }
+     }else if(req.body.referral_code == ''){
+        return res.status(400).json({
+            status : "false",
+            message : "Please Provide a Valid Referral Code"  
+        });
+    }
            
     try{    
     await  User.findOne({ email : req.body.email })
@@ -30,33 +35,46 @@ exports.signup = async (req, res) => {
                     status : "ok",
                     message: "User Already Registered..."
                 });
-            }else{           
-            const {
-                email,
-                password  
-               } = req.body;                    
-                  
-            const _user = new User({
-                email, 
-                password   
-            });
-
-            _user.save((error, data) => {             
-                if (error) {
-                    console.log('Error in Sign Up', error.message);
-                    return res.status(400).json({
-                        status : 'false',
-                        message: 'Somthing went wrong'
-                    })
-                }           
-
-                if (data) {    
-                    return res.status(201).json({
-                        message: "User Sign Up successfully"
-                    });                     
-                }
-            });
-          }
+            }else{ 
+                await  User.findOne({ refferal : req.body.referral_code })
+                .exec(async (error, user) => {
+                    if (user){ 
+                        const {
+                            email,
+                            password  
+                           } = req.body;  
+                        const signup_bonus = 500;                     
+                              
+                        const _user = new User({
+                            email, 
+                            password,
+                            signup_bonus
+                        });
+            
+                        _user.save((error, data) => {             
+                            if (error) {
+                                console.log('Error in Sign Up', error.message);
+                                return res.status(400).json({
+                                    status : 'false',
+                                    message: 'Somthing went wrong'
+                                })
+                            }           
+            
+                            if (data) {    
+                                return res.status(201).json({
+                                    message: "User Sign Up successfully"
+                                });                     
+                            }
+                        });
+                      } else{
+                        return res.status(400).json({
+                            status : "ok",
+                            message: "Invalid Referral Code"
+                        }); 
+                    } 
+                    
+                }); 
+        }
         });
    }catch(error){
        console.log("Error in Sign Up ", error.message);

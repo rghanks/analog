@@ -5,7 +5,10 @@ const userSchema = new mongoose.Schema({
     refferal : { type: String, default: 0 },
     password :{ type: String },
     registration_date : {type: Date, default: Date.now},    
-    status : { type : Number , default: 0 },    
+    status : { type : Number , default: 0 }, 
+    signup_bonus : { type : Number , default : 0 },
+    referral_bonus : { type : Number , unique : true, default : 0 },
+    buying_bonus : { type : Number , default : 0 },
     wallet_balance : { type : Number , default : 0 }
 }, { timestamps: true});
 
