@@ -108,7 +108,7 @@ exports.signin = async (req, res) => {
   }
   
   exports.logout = async (req, res) => {  
-    
+   console.log('hello');
     
   }
   exports.test = async (req, res) => {  
