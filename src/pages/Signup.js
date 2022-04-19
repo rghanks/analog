@@ -35,19 +35,19 @@ const Signup = (props) => {
 
   // Show the Validation Box
 
-  myInput.onfocus = function () {
+  function _onfousu() {
     document.getElementById("validation-box").style.display = "block";
-  };
+  }
 
   // hide the Validation Box
 
-  myInput.onblur = function () {
+  function _onblur() {
     document.getElementById("validation-box").style.display = "none";
-  };
+  }
 
   // when User Start To type letter Validation
 
-  myInput.onkeyup = function () {
+  function _onkeyup() {
     var symble = /[#@$%&*]/g;
     if (myInput.value.match(symble)) {
       letter.classList.remove("invalid");
@@ -88,7 +88,7 @@ const Signup = (props) => {
       length.classList.remove("valid");
       length.classList.add("invalid");
     }
-  };
+  }
 
   return (
     <div>
@@ -176,6 +176,9 @@ const Signup = (props) => {
                       placeholder="Enter your password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
+                      onFocus={_onfousu}
+                      onBlur={_onblur}
+                      onKeyUp={_onkeyup}
                     />
                   </div>
                   <div id="validation-box">
