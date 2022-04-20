@@ -193,8 +193,9 @@ exports.signin = async (req, res) => {
                               }           
               
                               if (data) {    
-                                  return res.status(201).json({
-                                      message: "User Sign Up successfully"
+                                  return res.status(200).json({
+                                    status : 'true',
+                                    message: "User Sign Up successfully"
                                   });                     
                               }
                           });
