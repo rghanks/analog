@@ -1,17 +1,19 @@
 import React, { Component } from "react";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
+// import FacebookLogin from "react-facebook-login";
 
-const Login = () => {
-  const clientId = "28253347908-l3f5pge45v4avpv50ppksjlkvvap6t35.apps.googleusercontent.com";
+const Login = (props) => {
+  const googleId =
+    "28253347908-l3f5pge45v4avpv50ppksjlkvvap6t35.apps.googleusercontent.com";
 
-  const onLoginSuccess = (res)=>{
+  const onLoginSuccess = (res) => {
     console.log(res.profileObj);
-    window.location.replace('/')
-  }
+    // window.location.replace('/')
+  };
 
-  const onLoginFailure = (res)=>{
-      console.log(res);
-  }
+  const onLoginFailure = (res) => {
+    console.log(res);
+  };
 
   return (
     <div>
@@ -75,7 +77,7 @@ const Login = () => {
                 <div class="form-group">
                   <div class="form-label-group">
                     <label class="form-label" for="password">
-                      Passcode
+                      Password
                     </label>
                     <a
                       class="link link-primary link-sm"
@@ -99,7 +101,7 @@ const Login = () => {
                       type="password"
                       class="form-control form-control-lg"
                       id="password"
-                      placeholder="Enter your passcode"
+                      placeholder="Enter your password"
                     />
                   </div>
                 </div>
@@ -114,10 +116,7 @@ const Login = () => {
               </form>
               <div class="form-note-s2 pt-4">
                 {" "}
-                New on our platform?{" "}
-                <a href="html/pages/auths/auth-register.html">
-                  Create an account
-                </a>
+                New on our platform? <a href="/signup">Create an account</a>
               </div>
               <div class="text-center pt-4 pb-3">
                 <h6 class="overline-title overline-title-sap">
@@ -126,23 +125,37 @@ const Login = () => {
               </div>
               <ul class="nav justify-center gx-4">
                 <li class="nav-item">
-                  <a class="nav-link" href="#">
-                    Facebook
-                  </a>
+                  {/* <FacebookLogin
+                    appId="1088597931155576"
+                    autoLoad={true}
+                    fields="name,email,picture"
+                    callback={props.SocialSignUp}
+                    cssClass="btnFacebook"
+                    icon={<i className="fa fa-facebook" class="logo-fb"></i>}
+                    textButton="Sign up with Facebook"
+                  /> */}
                 </li>
                 <li class="nav-item">
-                  {/* <a class="nav-link" href="#"> */}
-                    {" "}
-                        <GoogleLogin
-                        clientId={clientId}
-                        buttonText="Login"
-                        onSuccess={onLoginSuccess}
-                        onFailure={onLoginFailure}
-                        cookiePolicy={"single_host_origin"}
-                        // render={(e)=>  <button class="nav-link" onClick={onLoginSuccess}>
-                    //     Facebook
-                    //   </button>}
-                        />
+                  <GoogleLogin
+                    clientId={googleId}
+                    buttonText="Log in with Google"
+                    onSuccess={onLoginSuccess}
+                    onFailure={onLoginFailure}
+                    cookiePolicy={"single_host_origin"}
+                  />
+                  {/* <a class="nav-link" href="#"> */}{" "}
+                  {/* <GoogleLogin
+                    clientId={clientId}
+                    buttonText="Login"
+                    onSuccess={onLoginSuccess}
+                    onFailure={onLoginFailure}
+                    cookiePolicy={"single_host_origin"}
+                    render={() => (
+                      <a class="nav-link" onClick={onLoginSuccess}>
+                        Google
+                      </a>
+                    )}
+                  /> */}
                   {/* </a> */}
                 </li>
               </ul>
