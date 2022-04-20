@@ -28,9 +28,9 @@ const userRouter = require('./router/userRouter')
 app.use('/api',userRouter);
 
 app.get('/get', function(req, res) {
-  res.send("hello world");
+  res.send("Hello world!!!");
 })
 
 app.listen(port, '0.0.0.0' , () => {
-    console.log(`Example app listening at http://localhost:${port}`);
+    console.log(`App listening at http://localhost:${port}`);
 });
