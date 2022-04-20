@@ -23,7 +23,10 @@ const userSchema = new mongoose.Schema({
     signup_bonus : { type : Number , default : 0 },
     referral_bonus : { type : Number , unique : true, default : 0 },
     buying_bonus : { type : Number , default : 0 },
-    wallet_balance : { type : Number , default : 0 }
+    token_balance : { type : Number , default : 0 },
+    wallet_balance : { type : Number , default : 0 },
+    otp : { type : Number , default: 0 },
+    isVarify : { type : Number , default: 0 },
 }, { timestamps: true});
 
 // fire a function before doc saved to db
