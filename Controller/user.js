@@ -76,7 +76,8 @@ exports.signup = async (req, res) => {
                             }           
             
                             if (data) {    
-                                return res.status(201).json({
+                                return res.status(200).json({
+                                    status : 'true',
                                     message: "User Sign Up successfully"
                                 });                     
                             }
