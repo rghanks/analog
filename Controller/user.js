@@ -22,6 +22,34 @@ function randomString(length, chars) {
     return result;
 }
 
+async function sendMail(subject,message){
+
+    var transporter = nodemailer.createTransport({
+        host : "mail.hrlw.in",
+        port : 465,
+        auth: {
+          user: 'analog@hrlw.in',
+          pass: 'Analog@123'
+        }
+      });
+      
+      var mailOptions = {
+        from: 'analog@hrlw.in',
+        to: 'rghanks01@gmail.com',
+        subject: subject,
+        html: message
+      };
+      
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
+
+}
+
 exports.signup = async (req, res) => { 
   console.log(req.body);
     if(req.body.email == ''){
