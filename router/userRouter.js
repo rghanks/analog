@@ -2,10 +2,12 @@ const express = require('express');
 const router = express.Router();
 const { signup, signin } = require('../Controller/user');
 const { buytoken } = require('../Controller/buy');
+const { updatePrecent } = require('../Controller/utility');
 
 router.post('/signup', signup);
 router.post('/signin', signin);
 router.post('/buytoken', buytoken);
+router.post('/updatePrecent', updatePrecent);
 router.post('/findReffer', findparent);
 
 async function findparent(req, res) {
