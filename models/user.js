@@ -17,11 +17,11 @@ const userSchema = new mongoose.Schema({
         required : [true, 'Please enter an password'],
         minlength : [6, 'Minimum password length is 6 character'] 
     },
-    my_referral_code: { type: String, unique : true, required : true},
+    my_referral_code: { type: String, unique : true,dropDups: true, required : true},
     registration_date : {type: Date, default: Date.now},    
     status : { type : Number , default: 0 }, 
     signup_bonus : { type : Number , default : 0 },
-    referral_bonus : { type : Number , unique : true, default : 0 },
+    referral_bonus : { type : Number , default : 0 },
     buying_bonus : { type : Number , default : 0 },
     token_balance : { type : Number , default : 0 },
     wallet_balance : { type : Number , default : 0 },
