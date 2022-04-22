@@ -21,4 +21,5 @@ user_purchase = await Percent.updateOne({
     }
    }
 )
+console.log(user_purchase);
 }
