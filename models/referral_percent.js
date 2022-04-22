@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bonusSchema = new mongoose.Schema({
+const referral_percentSchema = new mongoose.Schema({
    
     buying_bonus : { type : Number , default: 0 }, 
     level1 : { type : Number , default: 0 }, 
@@ -9,4 +9,4 @@ const bonusSchema = new mongoose.Schema({
 }, { timestamps: true});
 
 
-module.exports = mongoose.model("Bonus", bonusSchema);
+module.exports = mongoose.model("Bonus", referral_percentSchema);

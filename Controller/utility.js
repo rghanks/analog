@@ -1,17 +1,24 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const Bonus = require('../models/referral_percent');
 const mongoose = require("mongoose");
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 exports.updatePrecent = async (req, res) => {
-var db = mongoose.connection;
-var Percent = db.collection('referral_percents');
+// var db = mongoose.connection;
+// var Percent = db.collection('referral_percents');
+// const _userbuy = Bonus.insertMany([{
+//     buying_bonus : 5,
+//     level1:5,
+//     level2:3,
+//     level3:2,
+// }]).
 console.log(req.body.level1);
-user_purchase = await Percent.updateOne({
-    _id: '625e87fae0f531522da5c769'
+user_purchase = await Bonus.updateOne({
+    _id: '626240cf8a17a3b5fbf6dd43'
 }, {
     $set :{
         buying_bonus:req.body.buying,

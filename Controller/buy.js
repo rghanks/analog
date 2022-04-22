@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const User = require('../models/user');
 const Buy = require('../models/buy');
+const Bonus = require('../models/referral_percent');
 const mongoose = require("mongoose");
 app.use(bodyParser.json());
 app.use(express.json());
@@ -33,12 +34,12 @@ exports.buytoken = async (req, res) => {
           .exec(async (error, user) => {
               if (user){ 
                 var db = mongoose.connection;
-                var Percent = db.collection('referral_percents');
+                //var Percent = db.collection('referral_percents');
                 const token_buying = req.body.token_quantity
                 const token_price = req.body.token_price
                 const token_quantity = token_buying*token_price
 
-                const percnt = await Percent.findOne();
+                const percnt = await Bonus.findOne();
                 console.log(percnt.buying_bonus);
                 const bonus_perc = parseInt(percnt.buying_bonus)
                 const lev1 = parseInt(percnt.level1)
