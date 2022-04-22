@@ -9,11 +9,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 exports.alluser = async (req, res) => { 
         User.find({}, function(err, users) {
-          var userMap = {};
+        //   var userMap = {};
       
-          users.forEach(function(user) {
-            userMap[user._id] = user;
-          });
+        //   users.forEach(function(user) {
+        //     userMap[user._id] = user;
+        //   });
       
           res.send(userMap);  
         });
