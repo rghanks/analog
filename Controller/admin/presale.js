@@ -81,3 +81,11 @@ exports.presalelevel = async (req, res) => {
          console.log("Error in Sign Up ", error.message);
      }
   }
+
+  exports.getpresale = async (req, res) => { 
+    const {per_page,page} = req.query
+    const user = await Presale.find({}).limit(per_page).skip(per_page*(page-1));
+    // console.log(user,"user")
+    
+      res.status(200).json({user_data:user,totalCount:user.length});
+}
