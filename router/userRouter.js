@@ -4,13 +4,14 @@ const { signup, signin } = require('../Controller/user');
 const { buytoken } = require('../Controller/buy');
 const { updatePrecent } = require('../Controller/utility');
 const { alluser } = require('../Controller/admin/user');
+const { addpresale} = require('../Controller/admin/presale')
 
 router.post('/signup', signup);
 router.post('/signin', signin);
 router.post('/buytoken', buytoken);
 router.post('/updatePrecent', updatePrecent);
 router.post('/findReffer', findparent);
-
+router.post('/addpresale', addpresale);
 router.get('/alluser', alluser);
 
 async function findparent(req, res) {
