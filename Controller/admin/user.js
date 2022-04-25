@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const User = require('../../models/user');
+const percent = require('../../models/referral_percent');
 
 app.use(bodyParser.json());
 app.use(express.json());
@@ -15,3 +16,7 @@ exports.alluser = async (req, res) => {
           res.status(200).json({user_data:user,totalCount:user.length});
   }
   
+  exports.bonuspercent = async (req, res) => { 
+        const user = await percent.find({})
+        res.status(200).json({Bonus_percent:user});
+  }
