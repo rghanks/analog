@@ -8,6 +8,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 exports.alluser = async (req, res) => { 
+        const {per_page,page} = req.query
         const user = await User.find({}).limit(per_page).skip(per_page*(page-1));
         // console.log(user,"user")
         
