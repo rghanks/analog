@@ -30,17 +30,17 @@ exports.presalelevel = async (req, res) => {
             status : "false",
             message : "Provide Presale Duration"  
         });
-      }else if(req.body.Number.isNaN(coinquantity)){
+      }else if(isNaN(parseFloat(req.body.coinquantity))){
         return res.status(400).json({
             status : "false",
             message : "Quantity Should Be in Numeric"  
         });
-      } else if(req.body.Number.isNaN(coinprice)){
+      } else if(isNaN(parseFloat(req.body.coinprice))){
         return res.status(400).json({
             status : "false",
             message : "Price Should Be in Numeric"  
         });
-      } else if(req.body.Number.isNaN(duration)){
+      } else if(isNaN(parseFloat(req.body.duration))){
         return res.status(400).json({
             status : "false",
             message : "Duration Should Be in Numeric"  
@@ -59,15 +59,20 @@ exports.presalelevel = async (req, res) => {
                         const data = Presale.insertMany([{
                             levelname : req.body.levelname, 
                             coinquantity : req.body.coinquantity,
-                            coinprice : req.body.coinprice,
-                            duration : duration
+                            price : req.body.coinprice,
+                            duration : req.body.duration
                         }])
 
                         if (data) {  
                             return res.status(200).json({
                                 status : 'true',
-                                message: ""
+                                message: req.body.levelname+" is added at "+req.body.coinprice+" With Quantity "+req.body.coinquantity+" for Duration of "+req.body.duration+" month"
                             });                     
+                        } else {
+                            return res.status(400).json({
+                                status : 'true',
+                                message: "Record Not Saved Please Check Your Code"
+                            }); 
                         }
               
           }
