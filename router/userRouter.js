@@ -3,7 +3,7 @@ const router = express.Router();
 const { signup, signin } = require('../Controller/user');
 const { buytoken } = require('../Controller/buy');
 const { updatePrecent } = require('../Controller/utility');
-const { alluser } = require('../Controller/admin/user');
+const { alluser,bonuspercent } = require('../Controller/admin/user');
 const { presalelevel,getpresale} = require('../Controller/admin/presale');
 
 router.post('/signup', signup);
@@ -14,6 +14,7 @@ router.post('/findReffer', findparent);
 router.post('/addpresale', presalelevel);
 router.get('/alluser', alluser);
 router.get('/getpresale', getpresale);
+router.get('/bonuspercent', bonuspercent);
 
 async function findparent(req, res) {
     const { my_referral_code } = req.body
