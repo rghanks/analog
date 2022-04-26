@@ -28,5 +28,17 @@ user_purchase = await Bonus.updateOne({
     }
    }
 )
+
+if(user_purchase){
+    return res.status(400).json({
+        status : "true",
+        message : "Data Has been Updated"  
+    });
+} else {
+    return res.status(400).json({
+        status : "false",
+        message : "Error While Updating Data"  
+    });
+}
 console.log(user_purchase);
 }
