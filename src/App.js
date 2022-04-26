@@ -1,41 +1,45 @@
-import React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import './App.css';
-import Home from './pages/Home';
-import Psecurity from './pages/Psecurity';
-import Profile from './pages/Profile';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import Terms from './pages/Terms';
-import Faq from './pages/Faq';
-import Affiliate from './pages/Affiliate';
-import Transactions from './pages/Transactions';
-import Projects from './pages/Projects';
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./App.css";
+import Home from "./pages/Home";
+import Psecurity from "./pages/Psecurity";
+import Profile from "./pages/Profile";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Terms from "./pages/Terms";
+import Faq from "./pages/Faq";
+import Affiliate from "./pages/Affiliate";
+import Transactions from "./pages/Transactions";
+import Projects from "./pages/Projects";
+import EmailOtp from "./pages/EmailOtp";
+import ForgetPassword from "./pages/ForgetPassword";
+import ResetPassword from "./pages/ResetPassword";
+import ResendOtp from "./pages/ResendOtp";
+import Wallet from "./pages/Wallet";
 function App() {
- return (
-   <div>
- 
-
- <BrowserRouter>
-     <Switch>
-       <Route exact path="/" component={Home}/>
-       <Route exact path="/Psecurity" component={Psecurity}/>
-       <Route exact path="/Profile" component={Profile}/>
-       <Route exact path="/Login" component={Login}/>
-       <Route exact path="/Signup" component={Signup}/>
-       <Route exact path="/Terms" component={Terms}/>
-       <Route exact path="/Faq" component={Faq}/>
-       <Route exact path="/Affiliate" component={Affiliate}/>
-       <Route exact path="/Transactions" component={Transactions}/>
-       <Route exact path="/Projects" component={Projects}/>
-
-     </Switch>
-     </BrowserRouter>
-    
-  
-   </div>
- 
- )
+  return (
+    <div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/Psecurity" element={<Psecurity />} />
+          <Route path="/Profile" element={<Profile />} />
+          <Route path="/Login" element={<Login />} />
+          <Route path="/Signup" element={<Signup />} />
+          <Route path="/Terms" element={<Terms />} />
+          <Route path="/Faq" element={<Faq />} />
+          <Route path="/Affiliate" element={<Affiliate />} />
+          <Route path="/Transactions" element={<Transactions />} />
+          <Route path="/Projects" element={<Projects />} />
+          <Route path="/EmailOtp" element={<EmailOtp />} />
+          <Route path="/ForgetPassword" element={<ForgetPassword />} />
+          <Route path="/ResetPassword" element={<ResetPassword />} />
+          <Route path="/ResendOtp" element={<ResendOtp />} />
+          <Route path="/wallet" element={<Wallet />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
 }
 
 export default App;

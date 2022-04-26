@@ -1,32 +1,22 @@
 import React, { useState } from "react";
-import { GoogleLogin, GoogleLogout } from "react-google-login";
-import { BASE_URL } from "../Api_connection/config";
-import { Link, useNavigate } from "react-router-dom";
-import ForgetPassword from "./ForgetPassword";
 import swal from "sweetalert";
+import { useNavigate } from "react-router-dom";
 
-// import FacebookLogin from "react-facebook-login";
-
-const Login = (props) => {
+const ResendOtp = (props) => {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [emailerror, setEmailerror] = useState(false);
-  const [passworderror, setPassworderror] = useState(false);
   const [response, setResponse] = useState("");
   const navigate = useNavigate();
 
-  const googleId =
-    "28253347908-l3f5pge45v4avpv50ppksjlkvvap6t35.apps.googleusercontent.com";
-  const onLoginSuccess = (res) => {
-    console.log(res.profileObj);
-    // window.location.replace('/')
-  };
-  const onLoginFailure = (res) => {
-    console.log(res);
-  };
+  // console.log(email, "otpp");
 
-  async function Login() {
-    await fetch(BASE_URL + "/signin", {
+  // var email = localStorage.getItem("email");
+  // if (email == "") {
+  //   navigate("/");
+  // }
+  async function ResendOtpApi(e) {
+    // e.preventDefault();
+    await fetch("http://localhost:3001/api/sendotp", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -34,52 +24,34 @@ const Login = (props) => {
       },
       body: JSON.stringify({
         email: email,
-        password: password,
       }),
     })
       .then((res) => res.json())
       .then((resp) => {
         console.log(resp);
-        localStorage.setItem("email", email);
-
-        if (resp.status == 0) {
-          swal(
-            "Incorrect Credentials",
-            "Please Enter Right Credentials",
-            "error"
-          );
-        }
+        console.log(response, "resp");
         if (resp.status == 1) {
-          swal(`${resp.message}`, "Welcome", "success");
-          localStorage.setItem("token", resp.token);
-          navigate("/");
-        }
-        if (resp.status == 3) {
-          swal("Email is not varified", "Verify Email before Login", "error");
-          navigate("/ResendOtp");
-        }
-        if (resp.status == 4) {
-          swal("Email not Registered", "Please signup", "error");
-          localStorage.setItem("token", resp.token);
-        }
-        /*  else {
+          swal(
+            "OTP sended successfully",
+            "OTP Sended On Registerd Email ",
+            "success"
+          );
+
+          navigate("/EmailOtp");
+
+          console.log(resp, "resp");
+        } else {
           setResponse(resp);
-          swal(`${resp.message}`, "Try with new email ID", "error");
-        } */
+        }
       });
   }
-  const handelFormSubmit = (email, password) => {
-    // setValida(false);
+
+  const handelFormSubmit = (email) => {
     if (email == "") {
       setEmailerror(true);
     }
-
-    if (password == "") {
-      setPassworderror(true);
-    }
-
-    if (email !== "" && password !== "") {
-      Login();
+    if (email !== "") {
+      ResendOtpApi();
     }
   };
 
@@ -116,7 +88,7 @@ const Login = (props) => {
               </div>
               <div class="nk-block-head">
                 <div class="nk-block-head-content">
-                  <h5 class="nk-block-title">Sign-In</h5>
+                  <h5 class="nk-block-title">Resend OTP</h5>
                   <div class="nk-block-des">
                     <p>
                       Connect with <b>Analog Inceptive</b> of{" "}
@@ -125,35 +97,46 @@ const Login = (props) => {
                   </div>
                 </div>
               </div>
-              {/* {res.status == true ? (
-                <h1 style={{ color: "green", fontSize: 20 }}>{res.message}</h1>
+              {response.status == true ? (
+                <h1 style={{ color: "green", fontSize: 20 }}>
+                  {response.messege}
+                </h1>
               ) : (
-                <h1 style={{ color: "red", fontSize: 20 }}>{res.message}</h1>
-              )} */}
+                <h1 style={{ color: "red", fontSize: 20 }}>
+                  {response.messege}
+                </h1>
+              )}
               <form
+                action="#"
                 onSubmit={(e) => {
                   e.preventDefault();
-                  handelFormSubmit(email, password);
+
+                  handelFormSubmit(email);
                 }}
               >
+                {/* <h6 class="nk-block-title alert alert-primary alert_box_messege">
+                  OTP Is Sended on your Registered Email Id
+                </h6> */}
                 <div class="form-group">
                   <div class="form-label-group">
                     <label class="form-label" for="default-01">
-                      Email
+                      Enter Email
                     </label>
-                    <a class="link link-primary link-sm" tabindex="-1" href="#">
-                      Need Help?
-                    </a>
                   </div>
                   <input
-                    type="email"
+                    type="text"
                     class="form-control form-control-lg"
                     id="default-01"
-                    placeholder="Enter your email "
+                    placeholder="Enter Email"
                     value={email}
                     onChange={(e) => {
                       setEmail(e.target.value.toLowerCase());
                       setEmailerror(false);
+                    }}
+                    onBlur={() => {
+                      if (email === "") {
+                        setEmailerror(true);
+                      }
                     }}
                   />
                 </div>
@@ -163,48 +146,13 @@ const Login = (props) => {
                   </p>
                 ) : null}
                 <div class="form-group">
-                  <div class="form-label-group">
-                    <label class="form-label" for="password">
-                      Password
-                    </label>
-                    <a href="/ForgetPassword">Forget Password</a>
-                    {/* <Link to={ForgetPassword}>Forget Password</Link> */}
-                  </div>
-                  <div class="form-control-wrap">
-                    <a
-                      tabindex="-1"
-                      href="#"
-                      class="form-icon form-icon-right passcode-switch"
-                      data-target="password"
-                    >
-                      <em class="passcode-icon icon-show icon ni ni-eye"></em>
-                      <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
-                    </a>
-                    <input
-                      type="password"
-                      class="form-control form-control-lg"
-                      id="password"
-                      placeholder="Enter your password"
-                      minLength={8}
-                      onChange={(e) => {
-                        setPassword(e.target.value);
-                        setPassworderror(false);
-                      }}
-                    />
-                  </div>
-                </div>
-                {passworderror == true ? (
-                  <p style={{ color: "red", marginTop: -20 }}>
-                    Password Is Requierd *
-                  </p>
-                ) : null}
-                <div class="form-group">
                   <button
                     class="btn btn-lg btn-primary btn-block"
-                    // onClick={() => (window.location.href = "/faq")}
-                    // onClick={Login}
+                    // onClick={(e) => {
+                    //   ResendOtpApi(e);
+                    // }}
                   >
-                    Sign in
+                    Send OTP
                   </button>
                 </div>
               </form>
@@ -217,42 +165,6 @@ const Login = (props) => {
                   <span>OR</span>
                 </h6>
               </div>
-              <ul class="nav justify-center gx-4">
-                <li class="nav-item">
-                  {/* <FacebookLogin
-                    appId="1088597931155576"
-                    autoLoad={true}
-                    fields="name,email,picture"
-                    callback={props.SocialSignUp}
-                    cssClass="btnFacebook"
-                    icon={<i className="fa fa-facebook" class="logo-fb"></i>}
-                    textButton="Sign up with Facebook"
-                  /> */}
-                </li>
-                <li class="nav-item">
-                  <GoogleLogin
-                    clientId={googleId}
-                    buttonText="Sign in with Google"
-                    onSuccess={onLoginSuccess}
-                    onFailure={onLoginFailure}
-                    cookiePolicy={"single_host_origin"}
-                  />
-                  {/* <a class="nav-link" href="#"> */}{" "}
-                  {/* <GoogleLogin
-                    clientId={clientId}
-                    buttonText="Login"
-                    onSuccess={onLoginSuccess}
-                    onFailure={onLoginFailure}
-                    cookiePolicy={"single_host_origin"}
-                    render={() => (
-                      <a class="nav-link" onClick={onLoginSuccess}>
-                        Google
-                      </a>
-                    )}
-                  /> */}
-                  {/* </a> */}
-                </li>
-              </ul>
             </div>
             <div class="nk-block nk-auth-footer">
               <div class="nk-block-between">
@@ -370,4 +282,4 @@ const Login = (props) => {
   );
 };
 
-export default Login;
+export default ResendOtp;

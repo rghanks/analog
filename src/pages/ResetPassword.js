@@ -3,79 +3,69 @@ import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../Api_connection/config";
 import { Signupn } from "../Api_connection/ApiFunction";
 import { GoogleLogin } from "react-google-login";
-// import { FacebookLogin } from "react-facebook-login";
 import swal from "sweetalert";
+// import queryString from "query-string";
+import { useParams, useLocation } from "react-router-dom";
 
 // import FacebookLogin from "react-facebook-login";
-const Signup = (props) => {
+const ResetPassword = (props) => {
+  const location = useLocation();
+  const resetCode = location.search;
+  const resetCode1 = resetCode.substring(10);
+  console.log(resetCode1, "reset code");
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [referal, setReferel] = useState("");
   const [response, setResponse] = useState("");
-  const [emailerror, setEmailerror] = useState(false);
   const [passworderror, setPassworderror] = useState(false);
   const [confirmPassworderror, setConfirmPassworderror] = useState(false);
-
-  // const [showOtp, setShowOtp] = useState(false);
   // const [otp, setOTP] = useState("");
   // const [otpErr, setOtpError] = useState(false);
   // const [valida, setValida] = useState(false);
+  const clientId =
+    "28253347908-l3f5pge45v4avpv50ppksjlkvvap6t35.apps.googleusercontent.com";
 
-  async function Signup() {
-    await fetch(BASE_URL + "/signup", {
+  const onLoginSuccess = (res) => {
+    console.log(res.profileObj);
+  };
+
+  const onLoginFailure = (res) => {
+    console.log(res);
+  };
+
+  async function ResetPasswordApi() {
+    await fetch(BASE_URL + "/reset", {
       method: "POST",
       headers: {
         "content-type": "application/json",
         "allow-access-origin-control": "*",
       },
       body: JSON.stringify({
-        email: email,
+        resetCode: resetCode1,
         password: password,
-        confirm_password: confirmPassword,
-        referral_code: referal,
+        confirmPassword: confirmPassword,
       }),
     })
       .then((res) => res.json())
       .then((resp) => {
-        localStorage.setItem("email", email);
-        console.log(resp, "response..");
+        // localStorage.setItem("email", "");
 
-        if (resp.status == 1) {
-          swal("User Sign Up Successfully", "Please verify OTP", "success");
+        console.log(resp, "response..");
+        if (resp.status == "true") {
+          swal(resp.message);
           setTimeout(() => {
-            navigate("/EmailOtp");
-          }, 3000);
-        }
-        if (resp.status == 0) {
-          swal(
-            "Password and Confirm Password do not match",
-            "Enter Same Password",
-            "error"
-          );
-        }
-        if (resp.status == -1) {
-          swal("Email Already Registerd", "Try with new Email ID", "error");
-        } /* else {
+            navigate("/Login");
+          }, 2000);
+
+          // return <Navigate to="/dashboard" />;
+        } else {
           setResponse(resp);
-          // swal(`${resp.message}`, "Try with new email ID", "error");
-        } */
+        }
       });
   }
 
   //Login With Google
-
-  const GoogleId =
-    "28253347908-l3f5pge45v4avpv50ppksjlkvvap6t35.apps.googleusercontent.com";
-
-  const onLoginSuccess = (res) => {
-    console.log(res);
-  };
-
-  const onLoginFailure = (res) => {
-    console.log(res);
-  };
 
   //Validation Box
 
@@ -142,22 +132,16 @@ const Signup = (props) => {
     }
   }
 
-  const handelFormSubmit = (email, password, confirmPassword) => {
-    if (email == "") {
-      setEmailerror(true);
-    }
+  const handelFormSubmit = (password, confirmPassword) => {
     if (password == "") {
       setPassworderror(true);
     }
     if (confirmPassword == "") {
       setConfirmPassworderror(true);
     }
-
-    if (email !== "" && password !== "" && confirmPassword !== "") {
-      Signup();
-    }
   };
-
+  const params = useParams();
+  console.log(params.restcode, "params");
   return (
     <div>
       <div class="nk-content ">
@@ -191,7 +175,7 @@ const Signup = (props) => {
               </div>
               <div class="nk-block-head">
                 <div class="nk-block-head-content">
-                  <h5 class="nk-block-title">Sign-Up</h5>
+                  <h5 class="nk-block-title">Choose a new password.</h5>
                   <div class="nk-block-des">
                     <p>
                       Connect with <b>Analog Inceptive</b> of{" "}
@@ -200,47 +184,31 @@ const Signup = (props) => {
                   </div>
                 </div>
               </div>
+
+              {/* {res.status == true ? (
+                <h1 style={{ color: "green", fontSize: 20 }}>{res.message}</h1>
+              ) : res.status == false ? (
+                <h1 style={{ color: "red", fontSize: 20 }}>{res.message}</h1>
+              ) : null} */}
+
+              {response.status == true ? (
+                <h1 style={{ color: "green", fontSize: 20 }}>
+                  {response.message}
+                </h1>
+              ) : (
+                <h1 style={{ color: "red", fontSize: 20 }}>
+                  {response.message}
+                </h1>
+              )}
+
               <form
                 action="#"
                 onSubmit={(e) => {
                   e.preventDefault();
 
-                  handelFormSubmit(email, password, confirmPassword);
+                  handelFormSubmit(password, confirmPassword);
                 }}
               >
-                <div class="form-group ">
-                  <div class="form-label-group ">
-                    <label class="form-label" for="default-01">
-                      Email
-                    </label>
-                    <a class="link link-primary link-sm" tabindex="-1" href="#">
-                      Need Help?
-                    </a>
-                  </div>
-
-                  <input
-                    id="user"
-                    type="email"
-                    class="form-control form-control-lg"
-                    placeholder="Enter your email address"
-                    value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value.toLowerCase());
-                      setEmailerror(false);
-                    }}
-                    onBlur={() => {
-                      if (email === "") {
-                        setEmailerror(true);
-                      }
-                    }}
-                  />
-                </div>
-                {emailerror == true ? (
-                  <p style={{ color: "red", marginTop: -20 }}>
-                    Email Is Requierd *
-                  </p>
-                ) : null}
-
                 <div class="form-group">
                   <div class="form-label-group">
                     <label class="form-label" for="password">
@@ -268,15 +236,12 @@ const Signup = (props) => {
                         setPassword(e.target.value);
                         setPassworderror(false);
                       }}
-                      onFocus={() => _onfocus()}
                       // onBlur={() => {
-                      //   _onblur();
+                      //   if (password === "") {
+                      //     setPassworderror(true);
+                      //   }
                       // }}
-                      onBlur={() => {
-                        if (password === "") {
-                          setPassworderror(true);
-                        }
-                      }}
+                      onFocus={() => _onfocus()}
                       onKeyUp={() => _onkeyup()}
                     />
                   </div>
@@ -358,29 +323,11 @@ const Signup = (props) => {
                 ) : null}
 
                 <div class="form-group">
-                  <div class="form-label-group">
-                    <label class="form-label" for="referal-code">
-                      Referal Code (optional)
-                    </label>
-                  </div>
-                  <input
-                    type="text"
-                    class="form-control form-control-lg"
-                    id="referal-code"
-                    placeholder="Enter Referal Code"
-                    value={referal}
-                    onChange={(e) => {
-                      setReferel(e.target.value);
-                    }}
-                  />
-                </div>
-
-                <div class="form-group">
                   <button
                     class="btn btn-lg btn-primary btn-block"
-                    // onClick={Signup}
+                    onClick={ResetPasswordApi}
                   >
-                    Sign up
+                    Reset Password
                   </button>
                 </div>
               </form>
@@ -418,7 +365,7 @@ const Signup = (props) => {
                 </li>
                 <li class="nav-item">
                   <GoogleLogin
-                    clientId={GoogleId}
+                    clientId={clientId}
                     buttonText="Sign up with Google"
                     onSuccess={onLoginSuccess}
                     onFailure={onLoginFailure}
@@ -543,4 +490,4 @@ const Signup = (props) => {
   );
 };
 
-export default Signup;
+export default ResetPassword;

@@ -1,32 +1,26 @@
 import React, { useState } from "react";
-import { GoogleLogin, GoogleLogout } from "react-google-login";
 import { BASE_URL } from "../Api_connection/config";
-import { Link, useNavigate } from "react-router-dom";
-import ForgetPassword from "./ForgetPassword";
+import { useNavigate } from "react-router-dom";
+import { GoogleLogin } from "react-google-login";
 import swal from "sweetalert";
 
-// import FacebookLogin from "react-facebook-login";
-
-const Login = (props) => {
+const ForgetPassword = (props) => {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [emailerror, setEmailerror] = useState(false);
-  const [passworderror, setPassworderror] = useState(false);
-  const [response, setResponse] = useState("");
+  const [showMessage, setShowMessage] = useState(false);
+  const [showNewMessage, setShowNewMessage] = useState(false);
   const navigate = useNavigate();
 
-  const googleId =
-    "28253347908-l3f5pge45v4avpv50ppksjlkvvap6t35.apps.googleusercontent.com";
-  const onLoginSuccess = (res) => {
-    console.log(res.profileObj);
-    // window.location.replace('/')
-  };
-  const onLoginFailure = (res) => {
-    console.log(res);
-  };
+  // console.log(otp, "otpp");
 
-  async function Login() {
-    await fetch(BASE_URL + "/signin", {
+  //   var LocalEmail = localStorage.setItem("email", email);
+  //   console.log(LocalEmail, "LocalEmal");
+  //   if (LocalEmail == "t") {
+  //     navigate("/");
+  //   }
+  async function forgetPass(e) {
+    e.preventDefault();
+    await fetch("http://localhost:3001/api/forget", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -34,53 +28,46 @@ const Login = (props) => {
       },
       body: JSON.stringify({
         email: email,
-        password: password,
       }),
     })
       .then((res) => res.json())
-      .then((resp) => {
-        console.log(resp);
-        localStorage.setItem("email", email);
 
-        if (resp.status == 0) {
+      .then((resp) => {
+        // console.log(email);
+
+        console.log(resp, "resp");
+        if (resp.status == 1) {
+          //   navigate("/Login");
           swal(
-            "Incorrect Credentials",
-            "Please Enter Right Credentials",
-            "error"
+            "Reset link is shared on your registerd email id",
+            "Click on Reset button to reset password",
+            "info"
           );
         }
-        if (resp.status == 1) {
-          swal(`${resp.message}`, "Welcome", "success");
-          localStorage.setItem("token", resp.token);
-          navigate("/");
-        }
-        if (resp.status == 3) {
-          swal("Email is not varified", "Verify Email before Login", "error");
-          navigate("/ResendOtp");
-        }
         if (resp.status == 4) {
-          swal("Email not Registered", "Please signup", "error");
-          localStorage.setItem("token", resp.token);
+          swal("Email is not registerd", "", "error");
         }
-        /*  else {
-          setResponse(resp);
-          swal(`${resp.message}`, "Try with new email ID", "error");
-        } */
       });
   }
-  const handelFormSubmit = (email, password) => {
-    // setValida(false);
+
+  const handelEmailValidation = (email) => {
     if (email == "") {
       setEmailerror(true);
+      // showMessage(false);
     }
+  };
 
-    if (password == "") {
-      setPassworderror(true);
-    }
+  // Login With Google
 
-    if (email !== "" && password !== "") {
-      Login();
-    }
+  const clientId =
+    "28253347908-l3f5pge45v4avpv50ppksjlkvvap6t35.apps.googleusercontent.com";
+
+  const onLoginSuccess = (res) => {
+    console.log(res.profileObj);
+  };
+
+  const onLoginFailure = (res) => {
+    console.log(res);
   };
 
   return (
@@ -116,7 +103,7 @@ const Login = (props) => {
               </div>
               <div class="nk-block-head">
                 <div class="nk-block-head-content">
-                  <h5 class="nk-block-title">Sign-In</h5>
+                  <h5 class="nk-block-title">Reset Password </h5>
                   <div class="nk-block-des">
                     <p>
                       Connect with <b>Analog Inceptive</b> of{" "}
@@ -125,31 +112,42 @@ const Login = (props) => {
                   </div>
                 </div>
               </div>
-              {/* {res.status == true ? (
-                <h1 style={{ color: "green", fontSize: 20 }}>{res.message}</h1>
-              ) : (
-                <h1 style={{ color: "red", fontSize: 20 }}>{res.message}</h1>
-              )} */}
+              {/*  {showNewMessage ? (
+                <div>
+                  {showMessage == true ? (
+                    <div class="alert alert-success" role="alert">
+                      Reset Link shared on Registered email id
+                    </div>
+                  ) : (
+                    <div class="alert alert-danger" role="alert">
+                      Email ID is not Registered
+                    </div>
+                  )}
+                </div>
+              ) : null} */}
+
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
-                  handelFormSubmit(email, password);
+
+                  //   forgetPass();
                 }}
               >
-                <div class="form-group">
-                  <div class="form-label-group">
+                {/* <h6 class="nk-block-title alert alert-primary alert_box_messege">
+                  OTP Is Sended on your Registered Email Id
+                </h6> */}
+                <div class="form-group ">
+                  <div class="form-label-group ">
                     <label class="form-label" for="default-01">
                       Email
                     </label>
-                    <a class="link link-primary link-sm" tabindex="-1" href="#">
-                      Need Help?
-                    </a>
                   </div>
+
                   <input
+                    id="user"
                     type="email"
                     class="form-control form-control-lg"
-                    id="default-01"
-                    placeholder="Enter your email "
+                    placeholder="Enter your email address"
                     value={email}
                     onChange={(e) => {
                       setEmail(e.target.value.toLowerCase());
@@ -162,55 +160,25 @@ const Login = (props) => {
                     Email Is Requierd *
                   </p>
                 ) : null}
-                <div class="form-group">
-                  <div class="form-label-group">
-                    <label class="form-label" for="password">
-                      Password
-                    </label>
-                    <a href="/ForgetPassword">Forget Password</a>
-                    {/* <Link to={ForgetPassword}>Forget Password</Link> */}
-                  </div>
-                  <div class="form-control-wrap">
-                    <a
-                      tabindex="-1"
-                      href="#"
-                      class="form-icon form-icon-right passcode-switch"
-                      data-target="password"
-                    >
-                      <em class="passcode-icon icon-show icon ni ni-eye"></em>
-                      <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
-                    </a>
-                    <input
-                      type="password"
-                      class="form-control form-control-lg"
-                      id="password"
-                      placeholder="Enter your password"
-                      minLength={8}
-                      onChange={(e) => {
-                        setPassword(e.target.value);
-                        setPassworderror(false);
-                      }}
-                    />
-                  </div>
-                </div>
-                {passworderror == true ? (
-                  <p style={{ color: "red", marginTop: -20 }}>
-                    Password Is Requierd *
-                  </p>
-                ) : null}
+
                 <div class="form-group">
                   <button
                     class="btn btn-lg btn-primary btn-block"
-                    // onClick={() => (window.location.href = "/faq")}
-                    // onClick={Login}
+                    // // onClick={() => (window.location.href = "/faq")}
+                    onClick={(e) => {
+                      forgetPass(e);
+                      handelEmailValidation(email);
+                      setShowNewMessage(true);
+                    }}
                   >
-                    Sign in
+                    Reset Password
                   </button>
                 </div>
               </form>
               <div class="form-note-s2 pt-4">
                 {" "}
                 New on our platform? <a href="/signup">Create an account</a>
+                {/* New on our platform? <a href="/ResetPassword">Reset Password</a> */}
               </div>
               <div class="text-center pt-4 pb-3">
                 <h6 class="overline-title overline-title-sap">
@@ -218,7 +186,16 @@ const Login = (props) => {
                 </h6>
               </div>
               <ul class="nav justify-center gx-4">
-                <li class="nav-item">
+                <li class="nav-item ">
+                  {/* <FacebookLogin
+                      className="facebook-button"
+                      appId="1088597931155576"
+                      autoLoad={true}
+                      //   cssClass="my-facebook-button-class"
+                      fields="name,email,picture"
+                      scope="public_profile,user_friends,user_actions.books"
+                      callback={this.responseFacebook}
+                    /> */}
                   {/* <FacebookLogin
                     appId="1088597931155576"
                     autoLoad={true}
@@ -231,29 +208,16 @@ const Login = (props) => {
                 </li>
                 <li class="nav-item">
                   <GoogleLogin
-                    clientId={googleId}
-                    buttonText="Sign in with Google"
+                    clientId={clientId}
+                    buttonText="Sign up with Google"
                     onSuccess={onLoginSuccess}
                     onFailure={onLoginFailure}
                     cookiePolicy={"single_host_origin"}
                   />
-                  {/* <a class="nav-link" href="#"> */}{" "}
-                  {/* <GoogleLogin
-                    clientId={clientId}
-                    buttonText="Login"
-                    onSuccess={onLoginSuccess}
-                    onFailure={onLoginFailure}
-                    cookiePolicy={"single_host_origin"}
-                    render={() => (
-                      <a class="nav-link" onClick={onLoginSuccess}>
-                        Google
-                      </a>
-                    )}
-                  /> */}
-                  {/* </a> */}
                 </li>
               </ul>
             </div>
+
             <div class="nk-block nk-auth-footer">
               <div class="nk-block-between">
                 <ul class="nav nav-sm">
@@ -370,4 +334,4 @@ const Login = (props) => {
   );
 };
 
-export default Login;
+export default ForgetPassword;

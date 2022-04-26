@@ -80,3 +80,12 @@ display: none;
 .referal{
   margin-top: 13X;
 }
+@media (min-width: 992px){
+.nk-auth-container {
+    width: 35%;
+}
+
+}
+
+
+
