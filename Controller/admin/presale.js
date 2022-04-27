@@ -131,3 +131,12 @@ exports.updatepresale = async (req, res) => {
             });
         }
       }
+
+
+      exports.getpresalebyid = async (req, res) => { 
+        const {_id} = req.query
+        const user = await Presale.find({_id:_id});
+        // console.log(user,"user")
+        
+          res.status(200).json({_data:user});
+    }
