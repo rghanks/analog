@@ -89,3 +89,45 @@ exports.presalelevel = async (req, res) => {
     
       res.status(200).json({user_data:user,totalCount:user.length});
 }
+
+exports.deletepresale = async (req, res) => { 
+    const {_id} = req.query
+    const result = await Presale.deleteOne({_id: _id}, function(err, obj) {
+        if(result){
+            return res.status(200).json({
+                status : "true",
+                message : "Data Has been Deleted"  
+            });
+        } else {
+            return res.status(400).json({
+                status : "false",
+                message : "Error While Updating Data"  
+            });
+        }
+      });
+}
+
+exports.updatepresale = async (req, res) => { 
+    const result = await Presale.updateOne({
+        _id: req.body._id
+    }, {
+        $set :{
+            levelname:req.body.levelname,
+            coinquantity:req.body.coinquantity,
+            price:req.body.price,
+            duration:req.body.duration,
+        }
+       }
+    )
+        if(result){
+            return res.status(200).json({
+                status : "true",
+                message : "Data Has been Updated"  
+            });
+        } else {
+            return res.status(400).json({
+                status : "false",
+                message : "Error While Updating Data"  
+            });
+        }
+      }
