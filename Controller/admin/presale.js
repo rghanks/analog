@@ -92,7 +92,7 @@ exports.presalelevel = async (req, res) => {
 
 exports.deletepresale = async (req, res) => { 
     const {_id} = req.query
-    const result = await Presale.deleteOne({_id: _id}, function(err, obj) {
+    await Presale.deleteOne({_id: _id}).then((result)=>{
         if(result){
             return res.status(200).json({
                 status : "true",
@@ -104,7 +104,7 @@ exports.deletepresale = async (req, res) => {
                 message : "Error While Updating Data"  
             });
         }
-      });
+    })       
 }
 
 exports.updatepresale = async (req, res) => { 
@@ -135,7 +135,7 @@ exports.updatepresale = async (req, res) => {
 
       exports.getpresalebyid = async (req, res) => { 
         const {_id} = req.query
-        const user = await Presale.find({_id:_id});
+        const user = await Presale.findOne({_id:_id});
         // console.log(user,"user")
         
           res.status(200).json({_data:user});
