@@ -17,6 +17,9 @@ import ResetPassword from "./pages/ResetPassword";
 import ResendOtp from "./pages/ResendOtp";
 import Wallet from "./pages/Wallet";
 function App() {
+  console.log("Rajneesh");
+  console.log(localStorage.getItem("token"), "LOCLASTORAGE");
+  console.log(localStorage.getItem("email"), "LOCLASTORAGE");
   return (
     <div>
       <BrowserRouter>

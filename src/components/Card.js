@@ -1,159 +1,107 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 const Card1 = (props) => {
+  const walletInfo = props.wallet;
+
+  const [text, setText] = useState("");
+  const [isCopied, setIsCopied] = useState(false);
+
+  const onCopyText = () => {
+    setIsCopied(true);
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 1000);
+  };
+
+  /* const addString = props.address;
+  const first = addString?.substring(0, 20);
+  const second = addString?.substring(22, addString.length);
+  const address = first + "...." + second;
+ */
   return (
     <>
-      <div className="container">
-        <div className="row">
-          <div class="col-sm-6 col-lg-4 col-xl-6 col-xxl-4">
+      <div className="container mt-1">
+        <div className="row" style={{ padding: "0px" }}>
+          <div className="">
             <div class="card card-bordered is-dark">
               <div class="nk-wgw">
                 <div class="nk-wgw-inner">
-                  <a
-                    class="nk-wgw-name"
-                    href="/demo5/crypto/wallet-bitcoin.html"
-                  >
-                    <div class="nk-wgw-icon is-default">
-                      <em class="icon ni ni-sign-kobo"></em>
+                  <div className="row">
+                    <div className="col-6">
+                      <a
+                        class="nk-wgw-name"
+                        href="/demo5/crypto/wallet-bitcoin.html"
+                      >
+                        <div class="nk-wgw-icon is-default">
+                          <img
+                            className="img-rounded"
+                            src={props.logo}
+                            style={{ width: "30px" }}
+                          />
+                          {/* <em class="icon ni ni-sign-kobo"></em> */}
+                        </div>
+                        <h5 class="nk-wgw-title title ml-2">{props.title}</h5>
+                      </a>
+                      <div class="nk-wgw-balance">
+                        <div class="amount">
+                          {props.price}
+                          <span class="currency currency-nio">
+                            {props.lable}
+                          </span>
+                        </div>
+                        <div class="amount-sm">
+                          {props.priceInUsd}
+                          <span class="currency currency-usd">USD</span>
+                        </div>
+                      </div>
                     </div>
-                    <h5 class="nk-wgw-title title">NioWallet</h5>
-                  </a>
-                  <div class="nk-wgw-balance">
-                    <div class="amount">
-                      40.509505<span class="currency currency-nio">NIO</span>
+                    <div className="col-6">
+                      <img
+                        src={`https://image-charts.com/chart?chs=177x177&cht=qr&chl=${walletInfo?.walletAddr}&choe=UTF-8&icqrb=0b3175&icqrf=FFFFFF`}
+                        style={{ height: "100px" }}
+                      />
                     </div>
-                    <div class="amount-sm">
-                      8,924.63<span class="currency currency-usd">USD</span>
+                  </div>
+                  <div className="row d-flex align-items-around">
+                    <div className="col-12">
+                      <span
+                        class="amount-sm"
+                        style={{
+                          color: "white",
+                          marginTop: "5px",
+                          marginBottom: "0px",
+                          fontSize: "14px",
+                        }}
+                      >
+                        {props.address}
+                        {/* <span class="currency currency-usd">USD</span> */}
+                      </span>
+                      <div className="container">
+                        <input
+                          type="text"
+                          value={text}
+                          placeholder="Type some text here"
+                          onChange={(event) => setText(event.target.value)}
+                        />
+                        <CopyToClipboard text={text} onCopy={onCopyText}>
+                          <div className="copy-area">
+                            <button>Copy to Clipboard</button>
+                            <span
+                              className={`copy-feedback ${
+                                isCopied ? "active" : ""
+                              }`}
+                            >
+                              Copied!
+                            </span>
+                          </div>
+                        </CopyToClipboard>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div class="nk-wgw-actions">
-                  <ul>
-                    <li>
-                      <a href="#">
-                        <em class="icon ni ni-arrow-up-right"></em>
-                        <span>Send</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <em class="icon ni ni-arrow-down-left"></em>
-                        <span>Receive</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <em class="icon ni ni-arrow-to-right"></em>
-                        <span>Withdraw</span>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                <div class="nk-wgw-more dropdown">
-                  <a
-                    href="#"
-                    class="btn btn-icon btn-trigger"
-                    data-bs-toggle="dropdown"
-                  >
-                    <em class="icon ni ni-more-h"></em>
-                  </a>
-                  <div class="dropdown-menu dropdown-menu-xs dropdown-menu-end">
-                    <ul class="link-list-plain sm">
-                      <li>
-                        <a href="#">Details</a>
-                      </li>
-                      <li>
-                        <a href="#">Edit</a>
-                      </li>
-                      <li>
-                        <a href="#">Delete</a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-4 col-md-4 col-12 mt-1">
-            <div class="card text-white bg-primary">
-              {" "}
-              <div class="card-header">Binance</div>{" "}
-              <div class="card-inner">
-                {" "}
-                <h5 class="card-title">Primary card title</h5>{" "}
-                <p class="card-text">
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </p>{" "}
-              </div>
-            </div>
-          </div>
-          <div className="col-4 col-md-4 col-12 mt-1">
-            <div class="card text-white bg-primary">
-              {" "}
-              <div class="card-header">
-                Bitcoin
-                <div className="rounded">
-                  {/* <img src="images/logo.png" className="rounded" /> */}
-                </div>
-              </div>{" "}
-              <div class="card-inner">
-                {" "}
-                <h5 class="card-title">Primary card title</h5>{" "}
-                <p class="card-text">
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </p>{" "}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-4 col-md-4 col-12 mt-1">
-            <div class="card text-white bg-primary">
-              {" "}
-              <div class="card-header">Ethereum</div>{" "}
-              <div class="card-inner">
-                {" "}
-                <h5 class="card-title">Primary card title</h5>{" "}
-                <p class="card-text">
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </p>{" "}
-              </div>
-            </div>
-          </div>
-          <div className="col-4 col-md-4 col-12 mt-1">
-            <div class="card text-white bg-primary">
-              {" "}
-              <div class="card-header">Binance</div>{" "}
-              <div class="card-inner">
-                {" "}
-                <h5 class="card-title">Primary card title</h5>{" "}
-                <p class="card-text">
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </p>{" "}
-              </div>
-            </div>
-          </div>
-          <div className="col-4 col-md-4 col-12 mt-1">
-            <div class="card text-white bg-primary">
-              {" "}
-              <div class="card-header">
-                Bitcoin
-                <div className="rounded">
-                  {/* <img src="images/logo.png" className="rounded" /> */}
-                </div>
-              </div>{" "}
-              <div class="card-inner">
-                {" "}
-                <h5 class="card-title">Primary card title</h5>{" "}
-                <p class="card-text">
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </p>{" "}
               </div>
             </div>
           </div>

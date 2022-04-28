@@ -3,7 +3,9 @@ import { GoogleLogin, GoogleLogout } from "react-google-login";
 import { BASE_URL } from "../Api_connection/config";
 import { Link, useNavigate } from "react-router-dom";
 import ForgetPassword from "./ForgetPassword";
+import { useSelector, useDispatch } from "react-redux";
 import swal from "sweetalert";
+import { login } from "../redux/userSlice";
 
 // import FacebookLogin from "react-facebook-login";
 
@@ -14,7 +16,7 @@ const Login = (props) => {
   const [passworderror, setPassworderror] = useState(false);
   const [response, setResponse] = useState("");
   const navigate = useNavigate();
-
+  //const dispatch = useDispatch();
   const googleId =
     "28253347908-l3f5pge45v4avpv50ppksjlkvvap6t35.apps.googleusercontent.com";
   const onLoginSuccess = (res) => {
@@ -40,7 +42,7 @@ const Login = (props) => {
       .then((res) => res.json())
       .then((resp) => {
         console.log(resp);
-        localStorage.setItem("email", email);
+        // localStorage.setItem("email", email);
 
         if (resp.status == 0) {
           swal(
@@ -51,6 +53,13 @@ const Login = (props) => {
         }
         if (resp.status == 1) {
           swal(`${resp.message}`, "Welcome", "success");
+          //dispatch(login, { isLoggedIn: true, userInfo: { email } });
+          localStorage.setItem("analoguser", {
+            isLoggedIn: true,
+            userInfo: { email },
+          });
+
+          localStorage.setItem("email", resp.email);
           localStorage.setItem("token", resp.token);
           navigate("/");
         }
@@ -60,7 +69,6 @@ const Login = (props) => {
         }
         if (resp.status == 4) {
           swal("Email not Registered", "Please signup", "error");
-          localStorage.setItem("token", resp.token);
         }
         /*  else {
           setResponse(resp);
