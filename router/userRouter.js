@@ -1,4 +1,5 @@
 const express = require("express");
+const axios = require("axios");
 const router = express.Router();
 const {
   signup,
@@ -9,6 +10,7 @@ const {
   forgetPassword,
   resetPassword,
   createWallet,
+  walletData,
 } = require("../Controller/user");
 
 router.post("/signup", signup);
@@ -20,6 +22,8 @@ router.post("/sendotp", sendotp);
 router.post("/forget", forgetPassword);
 router.post("/reset", resetPassword);
 router.post("/createWallet", createWallet);
+router.get("/getCoinData", getCMCData);
+router.post("/getwalletdata", walletData);
 
 async function findparent(req, res) {
   const { my_referral_code } = req.body;
@@ -65,4 +69,34 @@ async function findparent(req, res) {
   }
 }
 
+async function getCMCData(req, res) {
+  try {
+    const query_coin_symbol_array = [
+      "btc",
+      "eth",
+      "trx",
+      "usdt",
+      "busd",
+      "shib",
+      "bnb",
+      "matic",
+      "sol",
+    ];
+    var coin_symbols = query_coin_symbol_array.join(",");
+    var conver_currency = "usd";
+    const final_third_party_api_url = `https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=${coin_symbols}&convert=${conver_currency}`;
+    const ress = await axios.get(final_third_party_api_url, {
+      headers: {
+        "Content-Type": "Application/json",
+        // "X-CMC_PRO_API_KEY": process.env.COIN_MARKET_CAP_API_KEY
+        "X-CMC_PRO_API_KEY": "024d5931-52b8-4c1f-8d99-3928fd987163",
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
+    console.log(ress.data.data);
+    return res.status(200).json(ress.data.data);
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+}
 module.exports = router;

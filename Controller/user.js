@@ -8,6 +8,7 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const mongoose = require("mongoose");
 const forgetPassword = require("../models/forgetPassword");
+const userWallet = require("../models/userWallet");
 
 app.use(bodyParser.json());
 app.use(express.json());
@@ -202,6 +203,7 @@ exports.signin = async (req, res) => {
               status: 1,
               token: token,
               user: _id,
+              email: email,
               message: "Login Successful",
             });
           } else {
@@ -757,3 +759,21 @@ async function createBNBAddress() {
   bnb_address.symbol = "BNB";
   return bnb_address;
 }
+
+exports.walletData = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const walletData = await userWallet.find({ email });
+    if (walletData) {
+      return res.status(200).json(walletData);
+    } else {
+      return res
+        .status(400)
+        .json({ message: "something went wrong. member not found." });
+    }
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+};
+
+
