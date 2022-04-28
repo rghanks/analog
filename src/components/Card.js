@@ -77,6 +77,7 @@ const Card1 = (props) => {
                         }}
                       >
                         {props.address}
+                        {setText(props.address)}
                         {/* <span class="currency currency-usd">USD</span> */}
                       </span>
                       <div className="container">
